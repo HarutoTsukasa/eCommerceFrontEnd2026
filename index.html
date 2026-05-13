@@ -1,20 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>eCommerce — Tienda Online</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-  <!-- DataTables -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
-  <!-- =======================================================
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PurpleShop — Tienda Online</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <!-- =======================================================
     * Template Name: eCommerce-FrontEnd
     * Template URL: 
-    * Updated: Abr 23 2026 with Bootstrap v5.3.3
+    * Updated: May 2026 with Bootstrap v5.3.3
     * Author: HarutoTsukasa
     * License: Este proyecto está bajo la [Licencia MIT](LICENSE). Siéntete libre de usarlo y modificarlo.
     * Características:
@@ -27,1669 +31,752 @@
     *   - Formulario de registro
     *   - Footer con enlaces de redes sociales.
     ======================================================== -->
-  <style>
-    /* ── TOKENS ─────────────────────────────────────── */
-    :root {
-      --purple:       #5b21b6;
-      --purple-mid:   #7c3aed;
-      --purple-light: #a78bfa;
-      --rose:         #f43f5e;
-      --ink:          #0f0a1e;
-      --ink-80:       rgba(15,10,30,.8);
-      --surface:      #faf9ff;
-      --card-bg:      #ffffff;
-      --border:       rgba(91,33,182,.12);
-      --text:         #1e1030;
-      --muted:        #6b7280;
-      --ff-head:      'Playfair Display', "Bebas Neue", sans-serif;
-      --ff-body:      'DM Sans', system-ui, sans-serif;
-      --radius:       14px;
-      --shadow-sm:    0 2px 10px rgba(91,33,182,.08);
-      --shadow-md:    0 8px 32px rgba(91,33,182,.15);
-      --shadow-xl:    0 24px 60px rgba(91,33,182,.22);
-      --transition:   .28s cubic-bezier(.4,0,.2,1);
-    }
+  </head>
 
-    /* Dark mode */
-    body.dark {
-      --surface:    #0f0a1e;
-      --card-bg:    #1a1235;
-      --border:     rgba(167,139,250,.15);
-      --text:       #ede9fe;
-      --muted:      #9ca3af;
-      --shadow-sm:  0 2px 10px rgba(0,0,0,.4);
-      --shadow-md:  0 8px 32px rgba(0,0,0,.5);
-    }
+  <body>
+    <!-- ── PRELOADER ─────────────────────────────────── -->
+    <div id="preloader">
+      <div class="preloader-logo">Purple<span>Shop</span></div>
+      <div class="loader-bar"></div>
+    </div>
 
-    /* ── RESET ──────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--ff-body);
-      background: var(--surface);
-      color: var(--text);
-      transition: background var(--transition), color var(--transition);
-      overflow-x: hidden;
-    }
-    a { text-decoration: none; color: inherit; }
-    img { display: block; max-width: 100%; }
+    <!-- ── TOAST CONTAINER ──────────────────────────── -->
+    <div id="toastContainer"></div>
 
-    /* ── PRELOADER ───────────────────────────────────── */
-    #preloader {
-      position: fixed; inset: 0; z-index: 9999;
-      background: var(--ink);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 20px;
-      transition: opacity .6s, visibility .6s;
-    }
-    #preloader.hide { opacity: 0; visibility: hidden; }
-    .preloader-logo {
-      font-family: var(--ff-head);
-      font-size: 2.4rem;
-      color: #fff;
-      letter-spacing: -1px;
-    }
-    .preloader-logo span { color: var(--purple-light); }
-    .loader-bar {
-      width: 160px; height: 3px;
-      background: rgba(255,255,255,.15);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .loader-bar::after {
-      content: '';
-      display: block; height: 100%;
-      width: 40%;
-      background: linear-gradient(90deg, var(--purple-light), var(--rose));
-      border-radius: 99px;
-      animation: slide 1.2s ease-in-out infinite;
-    }
-    @keyframes slide {
-      0%   { transform: translateX(-100%); }
-      100% { transform: translateX(350%); }
-    }
-
-    /* ── TOAST ──────────────────────────────────────── */
-    #toastContainer {
-      position: fixed; top: 24px; right: 24px;
-      z-index: 8888;
-      display: flex; flex-direction: column; gap: 10px;
-    }
-    .ps-toast {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 14px 18px;
-      box-shadow: var(--shadow-xl);
-      display: flex; align-items: center; gap: 12px;
-      min-width: 260px;
-      animation: toastIn .3s ease;
-      border-left: 4px solid var(--purple);
-    }
-    .ps-toast.success { border-color: #22c55e; }
-    .ps-toast.error   { border-color: var(--rose); }
-    .ps-toast .toast-msg { font-size: .9rem; font-weight: 500; }
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateX(30px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-
-    /* ── BACK TO TOP ─────────────────────────────────── */
-    .back-top {
-      position: fixed; right: 24px; bottom: 24px; z-index: 700;
-      width: 44px; height: 44px;
-      background: var(--purple-mid);
-      color: #fff;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem;
-      opacity: 0; visibility: hidden;
-      transition: var(--transition);
-      box-shadow: var(--shadow-md);
-    }
-    .back-top.show { opacity: 1; visibility: visible; }
-    .back-top:hover { background: var(--purple); transform: translateY(-3px); }
-
-    /* ── WHATSAPP ────────────────────────────────────── */
-    .whatsapp-fab {
-      position: fixed; right: 24px; bottom: 80px; z-index: 700;
-      width: 50px; height: 50px;
-      background: #25d366;
-      color: #fff;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
-      box-shadow: var(--shadow-md);
-      transition: var(--transition);
-    }
-    .whatsapp-fab:hover { transform: scale(1.12); background: #1ebe5d; }
-
-    /* ── NAVBAR ─────────────────────────────────────── */
-    .ps-nav {
-      position: sticky; top: 0; z-index: 900;
-      background: var(--ink-80);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
-    .nav-inner {
-      max-width: 1200px; margin: 0 auto;
-      padding: 0 24px;
-      display: flex; align-items: center; gap: 16px;
-      height: 68px;
-    }
-    .nav-brand {
-      font-family: var(--ff-head);
-      font-size: 1.5rem;
-      color: #fff;
-      white-space: nowrap;
-      display: flex; align-items: center; gap: 10px;
-      flex-shrink: 0;
-    }
-    .brand-dot {
-      width: 10px; height: 10px;
-      background: linear-gradient(135deg, var(--purple-light), var(--rose));
-      border-radius: 50%;
-    }
-    .nav-links {
-      display: flex; align-items: center; gap: 4px;
-      list-style: none;
-      margin: 0; padding: 0;
-      flex: 1;
-    }
-    .nav-links a {
-      color: rgba(255,255,255,.75);
-      font-size: .88rem;
-      font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 8px;
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-    .nav-links a:hover, .nav-links a.active {
-      color: #fff;
-      background: rgba(255,255,255,.1);
-    }
-    /* dropdown */
-    .nav-dropdown { position: relative; }
-    .nav-dropdown > a { cursor: pointer; }
-    .dropdown-panel {
-      position: absolute; top: calc(100% + 8px); left: 0;
-      background: var(--ink);
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 12px;
-      min-width: 160px;
-      padding: 8px;
-      opacity: 0; visibility: hidden;
-      transform: translateY(8px);
-      transition: var(--transition);
-      z-index: 999;
-    }
-    .nav-dropdown:hover .dropdown-panel {
-      opacity: 1; visibility: visible; transform: translateY(0);
-    }
-    .dropdown-panel a {
-      display: block;
-      color: rgba(255,255,255,.75);
-      font-size: .85rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: var(--transition);
-    }
-    .dropdown-panel a:hover { color: #fff; background: rgba(255,255,255,.1); }
-
-    .nav-actions {
-      display: flex; align-items: center; gap: 8px;
-      flex-shrink: 0;
-    }
-    .icon-btn {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.2);
-      background: transparent;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--transition);
-      position: relative;
-    }
-    .icon-btn:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
-    .cart-badge {
-      position: absolute; top: -5px; right: -5px;
-      background: var(--rose);
-      color: #fff;
-      border-radius: 99px;
-      font-size: .65rem; font-weight: 700;
-      min-width: 18px; height: 18px;
-      display: flex; align-items: center; justify-content: center;
-      padding: 0 4px;
-    }
-    /* hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column; gap: 5px;
-      cursor: pointer;
-      background: none; border: none; padding: 4px;
-    }
-    .hamburger span {
-      display: block; width: 22px; height: 2px;
-      background: #fff;
-      border-radius: 99px;
-      transition: var(--transition);
-    }
-    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
-
-    @media (max-width: 768px) {
-      .hamburger { display: flex; }
-      .nav-links, .nav-actions { display: none; }
-      .nav-links.open, .nav-actions.open {
-        display: flex;
-        flex-direction: column;
-        position: fixed; top: 68px; left: 0; right: 0;
-        background: var(--ink);
-        padding: 16px 24px 24px;
-        border-bottom: 1px solid rgba(255,255,255,.06);
-        gap: 4px;
-        align-items: flex-start;
-        z-index: 888;
-      }
-      .nav-actions.open {
-        flex-direction: row;
-        padding-top: 0; padding-bottom: 16px;
-        border-bottom: none;
-        top: auto;
-        position: relative;
-      }
-      .dropdown-panel { position: static; opacity: 1; visibility: visible; transform: none; background: transparent; border: none; padding: 0 0 0 12px; }
-    }
-
-    /* ── LOGIN MODAL ─────────────────────────────────── */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 9000;
-      background: rgba(15,10,30,.7);
-      backdrop-filter: blur(6px);
-      display: none; align-items: center; justify-content: center;
-      padding: 20px;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal-box {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 36px 32px;
-      width: 100%; max-width: 420px;
-      box-shadow: var(--shadow-xl);
-      position: relative;
-      animation: modalIn .3s ease;
-    }
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(.94); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-    .modal-close {
-      position: absolute; top: 16px; right: 16px;
-      background: none; border: none; cursor: pointer;
-      font-size: 1.3rem; color: var(--muted);
-      transition: var(--transition);
-    }
-    .modal-close:hover { color: var(--rose); }
-    .modal-title {
-      font-family: var(--ff-head);
-      font-size: 1.7rem;
-      margin-bottom: 24px;
-    }
-
-    /* ── FORMS ──────────────────────────────────────── */
-    .form-group { margin-bottom: 18px; }
-    .form-label {
-      display: block;
-      font-size: .82rem;
-      font-weight: 600;
-      letter-spacing: .03em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    .form-control {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      background: var(--surface);
-      color: var(--text);
-      font-family: var(--ff-body);
-      font-size: .92rem;
-      transition: var(--transition);
-      outline: none;
-    }
-    .form-control:focus { border-color: var(--purple-mid); box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
-    .form-control.error { border-color: var(--rose); }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
-    .form-row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; }
-    @media (max-width: 600px) { .form-row-3 { grid-template-columns: 1fr; } }
-    .field-error {
-      font-size: .78rem;
-      color: var(--rose);
-      margin-top: 4px;
-      display: none;
-    }
-    .field-error.show { display: block; }
-    .form-check { display: flex; align-items: center; gap: 10px; }
-    .form-check input[type=checkbox] { accent-color: var(--purple-mid); width: 16px; height: 16px; cursor: pointer; }
-    .form-check label { font-size: .88rem; color: var(--muted); cursor: pointer; }
-    select.form-control { cursor: pointer; }
-    textarea.form-control { resize: vertical; min-height: 100px; }
-
-    /* ── BUTTONS ─────────────────────────────────────── */
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 11px 24px;
-      border-radius: 10px;
-      font-family: var(--ff-body);
-      font-size: .9rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: var(--transition);
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--purple-mid), var(--purple));
-      color: #fff;
-      box-shadow: 0 4px 18px rgba(124,58,237,.35);
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,.45); }
-    .btn-outline {
-      background: transparent;
-      border: 1.5px solid var(--border);
-      color: var(--text);
-    }
-    .btn-outline:hover { border-color: var(--purple-mid); color: var(--purple-mid); }
-    .btn-full { width: 100%; }
-    .btn:disabled { opacity: .6; pointer-events: none; }
-
-    /* ── HERO ───────────────────────────────────────── */
-    .hero {
-      min-height: 540px;
-      background: linear-gradient(135deg, var(--ink) 0%, #1e0a45 60%, var(--purple) 100%);
-      display: flex; align-items: center; justify-content: center;
-      text-align: center;
-      padding: 80px 24px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23a78bfa' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
-    }
-    .hero-content { position: relative; max-width: 700px; }
-    .hero-eyebrow {
-      display: inline-block;
-      background: rgba(167,139,250,.15);
-      color: var(--purple-light);
-      border: 1px solid rgba(167,139,250,.3);
-      border-radius: 99px;
-      font-size: .78rem;
-      font-weight: 600;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 6px 18px;
-      margin-bottom: 20px;
-    }
-    .hero h1 {
-      font-family: var(--ff-head);
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      color: #fff;
-      line-height: 1.1;
-      margin-bottom: 18px;
-    }
-    .hero h1 em { color: var(--purple-light); font-style: normal; }
-    .hero p {
-      color: rgba(255,255,255,.7);
-      font-size: 1.1rem;
-      line-height: 1.6;
-      margin-bottom: 36px;
-    }
-    .hero-search {
-      display: flex; gap: 8px;
-      max-width: 540px; margin: 0 auto;
-    }
-    .hero-search input {
-      flex: 1;
-      padding: 14px 18px;
-      border-radius: 12px;
-      border: 1.5px solid rgba(255,255,255,.2);
-      background: rgba(255,255,255,.08);
-      color: #fff;
-      font-family: var(--ff-body);
-      font-size: .95rem;
-      outline: none;
-      transition: var(--transition);
-    }
-    .hero-search input::placeholder { color: rgba(255,255,255,.45); }
-    .hero-search input:focus { border-color: var(--purple-light); background: rgba(255,255,255,.12); }
-    .hero-search .btn { padding: 14px 20px; border-radius: 12px; }
-
-    @media (max-width: 480px) {
-      .hero-search { flex-direction: column; }
-    }
-
-    /* ── SECTION WRAPPER ─────────────────────────────── */
-    .section { padding: 72px 24px; }
-    .section-inner { max-width: 1200px; margin: 0 auto; }
-    .section-header { text-align: center; margin-bottom: 48px; }
-    .section-header h2 {
-      font-family: var(--ff-head);
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      margin-bottom: 10px;
-    }
-    .section-header p { color: var(--muted); max-width: 480px; margin: 0 auto; }
-    .section-line {
-      display: block; width: 52px; height: 3px;
-      background: linear-gradient(90deg, var(--purple-mid), var(--rose));
-      border-radius: 99px;
-      margin: 12px auto 0;
-    }
-
-    /* ── CAROUSEL ───────────────────────────────────── */
-    .carousel-wrap {
-      max-width: 1200px; margin: 0 auto;
-      border-radius: 20px; overflow: hidden;
-      position: relative;
-      box-shadow: var(--shadow-xl);
-    }
-    .carousel-track {
-      display: flex;
-      transition: transform .55s cubic-bezier(.4,0,.2,1);
-    }
-    .carousel-slide {
-      flex: 0 0 100%;
-      position: relative;
-    }
-    .carousel-slide img {
-      width: 100%; height: 380px;
-      object-fit: cover;
-    }
-    @media (max-width: 600px) { .carousel-slide img { height: 220px; } }
-    .carousel-caption {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(15,10,30,.85) 0%, transparent 55%);
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 32px;
-      color: #fff;
-    }
-    .carousel-caption h3 { font-family: var(--ff-head); font-size: 1.6rem; margin-bottom: 6px; }
-    .carousel-caption p { color: rgba(255,255,255,.8); font-size: .92rem; }
-    .carousel-btn {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      width: 44px; height: 44px;
-      background: rgba(255,255,255,.15);
-      backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 50%;
-      color: #fff;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--transition);
-      z-index: 10;
-    }
-    .carousel-btn:hover { background: rgba(255,255,255,.28); }
-    .carousel-btn.prev { left: 14px; }
-    .carousel-btn.next { right: 14px; }
-    .carousel-dots {
-      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 7px; z-index: 10;
-    }
-    .carousel-dots span {
-      width: 7px; height: 7px;
-      border-radius: 99px;
-      background: rgba(255,255,255,.4);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .carousel-dots span.active { background: #fff; width: 22px; }
-
-    /* ── PRODUCT CARDS ───────────────────────────────── */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 24px;
-    }
-    .product-card {
-      background: var(--card-bg);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border);
-      transition: var(--transition);
-      display: flex; flex-direction: column;
-    }
-    .product-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-xl);
-    }
-    .product-card img {
-      width: 100%; height: 210px;
-      object-fit: cover;
-    }
-    .product-card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-    .product-category {
-      font-size: .72rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .08em;
-      color: var(--purple-mid);
-      margin-bottom: 6px;
-    }
-    .product-name {
-      font-family: var(--ff-head);
-      font-size: 1.05rem;
-      margin-bottom: 6px;
-    }
-    .product-desc { font-size: .84rem; color: var(--muted); line-height: 1.5; flex: 1; }
-    .product-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: 16px;
-    }
-    .product-price {
-      font-size: 1.25rem; font-weight: 700;
-      color: var(--purple-mid);
-    }
-    .add-to-cart {
-      padding: 9px 16px;
-      font-size: .82rem;
-    }
-
-    /* ── TABLE ──────────────────────────────────────── */
-    .table-wrapper {
-      background: var(--card-bg);
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-    }
-    .dt-toolbar {
-      padding: 16px 20px;
-      display: flex; align-items: center; gap: 10px;
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
-    }
-    .dt-filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1; }
-    .dt-search-wrap {
-      display: flex; align-items: center; gap: 8px;
-      flex: 1; min-width: 180px;
-      padding: 9px 14px;
-      border-radius: 9px;
-      border: 1.5px solid var(--border);
-      background: var(--surface);
-      transition: var(--transition);
-    }
-    .dt-search-wrap:focus-within { border-color: var(--purple-mid); }
-    .dt-search-wrap input {
-      flex: 1; border: none; background: transparent;
-      color: var(--text); font-family: var(--ff-body);
-      font-size: .88rem; outline: none;
-    }
-    .dt-search-wrap input::placeholder { color: var(--muted); }
-    .dt-select {
-      padding: 9px 32px 9px 12px;
-      border-radius: 9px;
-      border: 1.5px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      font-family: var(--ff-body);
-      font-size: .84rem;
-      outline: none;
-      cursor: pointer;
-      transition: var(--transition);
-      appearance: none;
-      -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-    }
-    .dt-select:focus { border-color: var(--purple-mid); }
-    .dt-badge-filter {
-      display: flex; gap: 6px; flex-wrap: wrap;
-    }
-    .dt-chip {
-      padding: 5px 13px;
-      border-radius: 99px;
-      font-size: .75rem; font-weight: 600;
-      border: 1.5px solid var(--border);
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .dt-chip.active, .dt-chip:hover {
-      background: var(--purple-mid); color: #fff; border-color: var(--purple-mid);
-    }
-    table { width: 100%; border-collapse: collapse; }
-    thead th {
-      background: linear-gradient(135deg, var(--purple) 0%, var(--purple-mid) 100%);
-      color: #fff !important;
-      font-size: .75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      padding: 14px 18px;
-      text-align: left;
-      white-space: nowrap;
-      border-bottom: none !important;
-    }
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: var(--transition);
-    }
-    tbody tr:last-child { border: none; }
-    tbody tr:hover { background: rgba(124,58,237,.04) !important; }
-    td {
-      padding: 13px 18px;
-      font-size: .88rem;
-      color: var(--text);
-      vertical-align: middle;
-    }
-    .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 99px;
-      font-size: .72rem; font-weight: 700;
-      letter-spacing: .04em;
-    }
-    .badge-green { background: #dcfce7; color: #166534; }
-    .badge-red   { background: #fee2e2; color: #991b1b; }
-    .dark .badge-green { background: rgba(34,197,94,.15); color: #4ade80; }
-    .dark .badge-red   { background: rgba(244,63,94,.15);  color: #fb7185; }
-    .tbl-btn {
-      padding: 6px 12px; font-size: .78rem;
-      border-radius: 7px;
-      border: 1.5px solid var(--border);
-      background: transparent;
-      color: var(--text);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .tbl-btn:hover { border-color: var(--purple-mid); color: var(--purple-mid); }
-    .tbl-btn.primary {
-      background: var(--purple-mid); color: #fff; border-color: var(--purple-mid);
-    }
-    .tbl-btn.primary:hover { background: var(--purple); }
-
-    /* ── DataTables overrides ────────────────────────── */
-    /* Hide default DT search/length controls (we use our own toolbar) */
-    .dataTables_wrapper .dataTables_filter,
-    .dataTables_wrapper .dataTables_length { display: none !important; }
-    .dataTables_wrapper .dataTables_info {
-      padding: 14px 20px;
-      font-size: .82rem;
-      color: var(--muted);
-      font-family: var(--ff-body);
-    }
-    .dataTables_wrapper .dataTables_paginate {
-      padding: 10px 20px 14px;
-      text-align: right;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 32px; height: 32px;
-      padding: 0 8px;
-      border-radius: 8px !important;
-      border: 1.5px solid var(--border) !important;
-      background: transparent !important;
-      color: var(--text) !important;
-      font-family: var(--ff-body);
-      font-size: .82rem;
-      cursor: pointer;
-      transition: var(--transition);
-      margin: 0 2px;
-      box-shadow: none !important;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-      background: rgba(124,58,237,.08) !important;
-      border-color: var(--purple-mid) !important;
-      color: var(--purple-mid) !important;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-      background: var(--purple-mid) !important;
-      border-color: var(--purple-mid) !important;
-      color: #fff !important;
-    }
-    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
-    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
-      opacity: .35; cursor: default;
-    }
-    /* Bottom bar */
-    .dataTables_wrapper .dataTables_bottom {
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap;
-      border-top: 1px solid var(--border);
-    }
-    /* Sorting icons */
-    table.dataTable thead th.sorting::after,
-    table.dataTable thead th.sorting_asc::after,
-    table.dataTable thead th.sorting_desc::after {
-      color: rgba(255,255,255,.5) !important;
-      font-size: .7rem;
-    }
-    table.dataTable thead th.sorting_asc::after  { color: #fff !important; }
-    table.dataTable thead th.sorting_desc::after { color: #fff !important; }
-    table.dataTable { border-collapse: collapse !important; width: 100% !important; }
-    /* Responsive child rows */
-    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
-    table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before {
-      background-color: var(--purple-mid) !important;
-      border-color: var(--purple-mid) !important;
-      box-shadow: none !important;
-    }
-    table.dataTable > tbody > tr.child ul.dtr-details {
-      display: block; width: 100%;
-    }
-    table.dataTable > tbody > tr.child ul.dtr-details > li {
-      display: flex; gap: 8px;
-      padding: 6px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: .85rem;
-      color: var(--text);
-    }
-    table.dataTable > tbody > tr.child ul.dtr-details > li:last-child { border: none; }
-    table.dataTable > tbody > tr.child ul.dtr-details .dtr-title {
-      font-weight: 700; color: var(--muted); min-width: 100px; font-size: .78rem;
-      text-transform: uppercase; letter-spacing: .04em;
-    }
-    table.dataTable > tbody > tr.child { background: rgba(124,58,237,.04) !important; }
-    /* Dark mode DT adjustments */
-    .dark table.dataTable > tbody > tr.child { background: rgba(124,58,237,.08) !important; }
-    .dark .dataTables_wrapper .dataTables_info { color: var(--muted); }
-    .dark table.dataTable thead th { background: linear-gradient(135deg, #2d0d6b 0%, var(--purple) 100%); }
-    .dark tbody tr:nth-child(even) { background: rgba(255,255,255,.015); }
-
-    /* ── CONTACT ─────────────────────────────────────── */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
-    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
-    .contact-info-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 32px;
-      box-shadow: var(--shadow-sm);
-      height: fit-content;
-    }
-    .contact-info-card h3 { font-family: var(--ff-head); font-size: 1.3rem; margin-bottom: 20px; }
-    .info-item {
-      display: flex; align-items: flex-start; gap: 14px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .info-item:last-child { border: none; }
-    .info-icon {
-      width: 38px; height: 38px;
-      background: rgba(124,58,237,.1);
-      color: var(--purple-mid);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-    .info-text small { display: block; font-size: .72rem; color: var(--muted); margin-bottom: 2px; text-transform: uppercase; font-weight: 600; letter-spacing: .05em; }
-    .info-text span { font-size: .9rem; }
-    .form-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 32px;
-      box-shadow: var(--shadow-sm);
-    }
-    .form-card h3 { font-family: var(--ff-head); font-size: 1.3rem; margin-bottom: 24px; }
-
-    /* ── REGISTER ────────────────────────────────────── */
-    .register-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 780px; margin: 0 auto;
-      box-shadow: var(--shadow-md);
-    }
-    @media (max-width: 600px) { .register-card { padding: 24px 18px; } }
-
-    /* ── FOOTER ─────────────────────────────────────── */
-    .footer {
-      background: var(--ink);
-      color: rgba(255,255,255,.75);
-      padding: 64px 24px 32px;
-    }
-    .footer-inner { max-width: 1200px; margin: 0 auto; }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1.5fr;
-      gap: 40px;
-      margin-bottom: 48px;
-    }
-    @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 520px) { .footer-grid { grid-template-columns: 1fr; gap: 28px; } }
-    .footer-brand h3 { font-family: var(--ff-head); color: #fff; font-size: 1.4rem; margin-bottom: 12px; }
-    .footer-brand p { font-size: .88rem; line-height: 1.7; }
-    .footer-col h4 { color: #fff; font-size: .82rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 10px; }
-    .footer-col ul a { color: rgba(255,255,255,.6); font-size: .88rem; transition: var(--transition); }
-    .footer-col ul a:hover { color: var(--purple-light); }
-    .social-row { display: flex; gap: 12px; margin-bottom: 24px; }
-    .social-link {
-      width: 38px; height: 38px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.15);
-      color: rgba(255,255,255,.7);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-    .social-link:hover { background: var(--purple-mid); border-color: var(--purple-mid); color: #fff; }
-    .newsletter-row { display: flex; gap: 8px; }
-    .newsletter-row input {
-      flex: 1; padding: 10px 14px;
-      border-radius: 9px;
-      border: 1px solid rgba(255,255,255,.15);
-      background: rgba(255,255,255,.07);
-      color: #fff;
-      font-family: var(--ff-body);
-      font-size: .85rem;
-      outline: none;
-    }
-    .newsletter-row input::placeholder { color: rgba(255,255,255,.35); }
-    .newsletter-row .btn { padding: 10px 16px; border-radius: 9px; font-size: .85rem; }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,.08);
-      padding-top: 24px;
-      text-align: center;
-      font-size: .82rem;
-      color: rgba(255,255,255,.4);
-    }
-
-    /* ── ANIMATIONS ─────────────────────────────────── */
-    .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity .6s ease, transform .6s ease;
-    }
-    .reveal.in { opacity: 1; transform: none; }
-    .reveal-delay-1 { transition-delay: .1s; }
-    .reveal-delay-2 { transition-delay: .2s; }
-    .reveal-delay-3 { transition-delay: .3s; }
-
-    /* ── SPINNER ─────────────────────────────────────── */
-    .spinner {
-      width: 16px; height: 16px;
-      border: 2px solid transparent;
-      border-top-color: currentColor;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
-</head>
-<body>
-
-<!-- ── PRELOADER ─────────────────────────────────── -->
-<div id="preloader">
-  <div class="preloader-logo">e<span>Commerce</span></div>
-  <div class="loader-bar"></div>
-</div>
-
-<!-- ── TOAST CONTAINER ──────────────────────────── -->
-<div id="toastContainer"></div>
-
-<!-- ── BACK TO TOP ──────────────────────────────── -->
-<a href="#" class="back-top" id="backTop" aria-label="Volver arriba">
-  <i class="bi bi-arrow-up"></i>
-</a>
-
-<!-- ── WHATSAPP ─────────────────────────────────── -->
-<a href="https://wa.me/+573209297401" target="_blank" rel="noopener" class="whatsapp-fab" aria-label="WhatsApp">
-  <i class="bi bi-whatsapp"></i>
-</a>
-
-<!-- ── NAVBAR ───────────────────────────────────── -->
-<nav class="ps-nav" role="navigation" aria-label="Menú principal">
-  <div class="nav-inner">
-    <a href="#" class="nav-brand">
-      <div class="brand-dot"></div>
-      eCommerce
+    <!-- ── BACK TO TOP ──────────────────────────────── -->
+    <a href="#" class="back-top" id="backTop" aria-label="Volver arriba">
+      <i class="bi bi-arrow-up"></i>
     </a>
 
-    <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+    <!-- ── WHATSAPP ─────────────────────────────────── -->
+    <a
+      href="https://wa.me/+573209297401"
+      target="_blank"
+      rel="noopener"
+      class="whatsapp-fab"
+      aria-label="WhatsApp"
+    >
+      <i class="bi bi-whatsapp"></i>
+    </a>
 
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#" class="active">Inicio</a></li>
-      <li><a href="#productos">Productos</a></li>
-      <li><a href="#contacto">Contacto</a></li>
-      <li><a href="#registro">Registro</a></li>
-      <li class="nav-dropdown">
-        <a>Categorías <i class="bi bi-chevron-down" style="font-size:.75rem;"></i></a>
-        <div class="dropdown-panel">
-          <a href="#">Electrónicos</a>
-          <a href="#">Ropa</a>
-          <a href="#">Hogar</a>
-          <a href="#">Deportes</a>
-          <a href="#">Juguetes</a>
-        </div>
-      </li>
-    </ul>
+    <!-- ── NAVBAR ───────────────────────────────────── -->
+    <nav class="ps-nav" role="navigation" aria-label="Menú principal">
+      <div class="nav-inner">
+        <a href="#" class="nav-brand">
+          <div class="brand-dot"></div>
+          PurpleShop
+        </a>
 
-    <div class="nav-actions" id="navActions">
-      <button class="icon-btn" id="darkToggle" aria-label="Cambiar modo">
-        <i class="bi bi-moon" id="darkIcon"></i>
-      </button>
-      <button class="icon-btn" id="cartBtn" aria-label="Carrito">
-        <i class="bi bi-bag"></i>
-        <span class="cart-badge" id="cartCount">3</span>
-      </button>
-      <button class="icon-btn" id="loginBtn" aria-label="Iniciar sesión" aria-haspopup="dialog">
-        <i class="bi bi-person"></i>
-      </button>
-    </div>
-  </div>
-</nav>
-
-<!-- ── LOGIN MODAL ──────────────────────────────── -->
-<div class="modal-overlay" id="loginModal" role="dialog" aria-modal="true" aria-label="Iniciar sesión">
-  <div class="modal-box">
-    <button class="modal-close" id="modalClose" aria-label="Cerrar">
-      <i class="bi bi-x-lg"></i>
-    </button>
-    <h2 class="modal-title">Iniciar Sesión</h2>
-    <form id="loginForm" novalidate>
-      <div class="form-group">
-        <label class="form-label" for="loginEmail">Email</label>
-        <input class="form-control" type="email" id="loginEmail" name="username" placeholder="tucorreo@ejemplo.com" required />
-        <span class="field-error" id="loginEmailErr">Ingresa un email válido</span>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="loginPass">Contraseña</label>
-        <input class="form-control" type="password" id="loginPass" name="password" placeholder="Tu contraseña" required />
-        <span class="field-error" id="loginPassErr">Ingresa tu contraseña</span>
-      </div>
-      <div class="form-group form-check">
-        <input type="checkbox" id="rememberMe" />
-        <label for="rememberMe">Recuérdame</label>
-      </div>
-      <button type="submit" class="btn btn-primary btn-full" id="loginSubmit">
-        Iniciar Sesión
-      </button>
-      <p style="text-align:center;margin-top:16px;font-size:.85rem;color:var(--muted);">
-        ¿No tienes cuenta? <a href="#registro" style="color:var(--purple-mid);font-weight:600;" id="goRegister">Regístrate</a>
-      </p>
-    </form>
-  </div>
-</div>
-
-<!-- ── HERO ─────────────────────────────────────── -->
-<section class="hero">
-  <div class="hero-content">
-    <span class="hero-eyebrow">Nueva temporada — 2025</span>
-    <h1>Tu tienda de<br/><em>confianza</em> online</h1>
-    <p>Encuentra los mejores productos al mejor precio con envíos rápidos a todo el país.</p>
-    <div class="hero-search">
-      <input type="text" id="heroSearch" placeholder="Buscar productos, marcas..." aria-label="Buscar productos" />
-      <button class="btn btn-primary" aria-label="Buscar">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- ── CAROUSEL ──────────────────────────────────── -->
-<section class="section" style="padding-top:48px;padding-bottom:0;">
-  <div class="section-inner">
-    <div class="carousel-wrap reveal">
-      <div class="carousel-track" id="carouselTrack">
-        <div class="carousel-slide">
-          <img src="https://images.unsplash.com/photo-1607082350899-7e105aa886ae?auto=format&fit=crop&w=1200&h=400&q=80" alt="Electrónicos" />
-          <div class="carousel-caption">
-            <h3>Electrónicos con hasta 50% Off</h3>
-            <p>Productos seleccionados con descuentos especiales por tiempo limitado</p>
-          </div>
-        </div>
-        <div class="carousel-slide">
-          <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1200&h=400&q=80" alt="Moda" />
-          <div class="carousel-caption">
-            <h3>Moda de Temporada</h3>
-            <p>Nueva colección disponible con descuentos exclusivos para miembros</p>
-          </div>
-        </div>
-        <div class="carousel-slide">
-          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1200&h=400&q=80" alt="Hogar" />
-          <div class="carousel-caption">
-            <h3>Hogar y Decoración</h3>
-            <p>Transforma tu espacio con nuestras ofertas exclusivas en hogar</p>
-          </div>
-        </div>
-      </div>
-      <button class="carousel-btn prev" id="carPrev" aria-label="Anterior"><i class="bi bi-chevron-left"></i></button>
-      <button class="carousel-btn next" id="carNext" aria-label="Siguiente"><i class="bi bi-chevron-right"></i></button>
-      <div class="carousel-dots" id="carDots">
-        <span class="active" data-idx="0"></span>
-        <span data-idx="1"></span>
-        <span data-idx="2"></span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── PRODUCTOS ─────────────────────────────────── -->
-<section class="section" id="productos">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <h2>Productos Destacados</h2>
-      <p>Los favoritos de nuestros clientes con la mejor relación calidad-precio</p>
-      <span class="section-line"></span>
-    </div>
-    <div class="products-grid">
-      <div class="product-card reveal reveal-delay-1">
-        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&h=300&q=80" alt="Smartphone Pro X" />
-        <div class="product-card-body">
-          <p class="product-category">Electrónicos</p>
-          <h3 class="product-name">Smartphone Pro X</h3>
-          <p class="product-desc">El mejor smartphone del mercado con cámara de 108MP y batería de larga duración.</p>
-          <div class="product-footer">
-            <span class="product-price">$599.99</span>
-            <button class="btn btn-primary add-to-cart">
-              <i class="bi bi-bag-plus"></i> Añadir
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="product-card reveal reveal-delay-2">
-        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&h=300&q=80" alt="Reloj Inteligente" />
-        <div class="product-card-body">
-          <p class="product-category">Accesorios</p>
-          <h3 class="product-name">Reloj Inteligente</h3>
-          <p class="product-desc">Monitoriza tu salud y actividad diaria con este elegante smartwatch.</p>
-          <div class="product-footer">
-            <span class="product-price">$199.99</span>
-            <button class="btn btn-primary add-to-cart">
-              <i class="bi bi-bag-plus"></i> Añadir
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="product-card reveal reveal-delay-3">
-        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&h=300&q=80" alt="Auriculares Premium" />
-        <div class="product-card-body">
-          <p class="product-category">Electrónicos</p>
-          <h3 class="product-name">Auriculares Premium</h3>
-          <p class="product-desc">Sonido de alta fidelidad con cancelación activa de ruido y 30h de batería.</p>
-          <div class="product-footer">
-            <span class="product-price">$149.99</span>
-            <button class="btn btn-primary add-to-cart">
-              <i class="bi bi-bag-plus"></i> Añadir
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="product-card reveal reveal-delay-1">
-        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&h=300&q=80" alt="Zapatillas Deportivas" />
-        <div class="product-card-body">
-          <p class="product-category">Deportes</p>
-          <h3 class="product-name">Zapatillas Deportivas</h3>
-          <p class="product-desc">Máxima comodidad y rendimiento para tus entrenamientos diarios.</p>
-          <div class="product-footer">
-            <span class="product-price">$89.99</span>
-            <button class="btn btn-primary add-to-cart">
-              <i class="bi bi-bag-plus"></i> Añadir
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── CATÁLOGO / TABLA ──────────────────────────── -->
-<section class="section" style="padding-top:0;">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <h2>Catálogo Completo</h2>
-      <p>Explora todos nuestros productos disponibles</p>
-      <span class="section-line"></span>
-    </div>
-    <div class="table-wrapper reveal">
-
-      <!-- Toolbar personalizada -->
-      <div class="dt-toolbar">
-        <div class="dt-filter-group">
-          <!-- Buscador global -->
-          <div class="dt-search-wrap">
-            <i class="bi bi-search" style="color:var(--muted);font-size:.9rem;"></i>
-            <input type="text" id="dtGlobalSearch" placeholder="Buscar producto, categoría..." aria-label="Buscar" />
-          </div>
-          <!-- Filtro categoría -->
-          <select class="dt-select" id="dtCatFilter" aria-label="Filtrar por categoría">
-            <option value="">Todas las categorías</option>
-            <option value="Electrónicos">Electrónicos</option>
-            <option value="Ropa">Ropa</option>
-            <option value="Hogar">Hogar</option>
-            <option value="Accesorios">Accesorios</option>
-          </select>
-          <!-- Filtro stock (chips) -->
-          <div class="dt-badge-filter" role="group" aria-label="Filtrar por disponibilidad">
-            <button class="dt-chip active" data-stock="">Todos</button>
-            <button class="dt-chip" data-stock="En stock">En stock</button>
-            <button class="dt-chip" data-stock="Agotado">Agotado</button>
-          </div>
-        </div>
-        <!-- Selector de filas por página -->
-        <select class="dt-select" id="dtPageLen" aria-label="Filas por página" style="min-width:120px;">
-          <option value="5">5 por página</option>
-          <option value="10" selected>10 por página</option>
-          <option value="25">25 por página</option>
-        </select>
-      </div>
-
-      <!-- Tabla DataTables -->
-      <table id="catalogTable" style="width:100%">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Producto</th>
-            <th>Categoría</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th class="no-sort">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>001</td><td>Smartphone Pro X</td><td>Electrónicos</td><td data-order="599.99">$599.99</td><td>En stock</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-          <tr><td>002</td><td>Reloj Inteligente</td><td>Electrónicos</td><td data-order="199.99">$199.99</td><td>En stock</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-          <tr><td>003</td><td>Auriculares Premium</td><td>Electrónicos</td><td data-order="149.99">$149.99</td><td>Agotado</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-          <tr><td>004</td><td>Zapatillas Deportivas</td><td>Ropa</td><td data-order="89.99">$89.99</td><td>En stock</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-          <tr><td>005</td><td>Set de Cocina Premium</td><td>Hogar</td><td data-order="249.99">$249.99</td><td>En stock</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-          <tr><td>006</td><td>Tablet Ultra HD</td><td>Electrónicos</td><td data-order="349.99">$349.99</td><td>En stock</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-          <tr><td>007</td><td>Camiseta Algodón Orgánico</td><td>Ropa</td><td data-order="29.99">$29.99</td><td>En stock</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-          <tr><td>008</td><td>Mochila Impermeable</td><td>Accesorios</td><td data-order="59.99">$59.99</td><td>Agotado</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-          <tr><td>009</td><td>Smart TV 55" 4K</td><td>Electrónicos</td><td data-order="699.99">$699.99</td><td>En stock</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-          <tr><td>010</td><td>Set de Jardinería</td><td>Hogar</td><td data-order="79.99">$79.99</td><td>En stock</td><td><button class="tbl-btn primary">Ver</button> <button class="tbl-btn">Editar</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- ── CONTACTO ──────────────────────────────────── -->
-<section class="section" id="contacto" style="background:rgba(124,58,237,.03);">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <h2>Contáctanos</h2>
-      <p>Estamos aquí para ayudarte, escríbenos cuando quieras</p>
-      <span class="section-line"></span>
-    </div>
-    <div class="contact-grid">
-      <div class="form-card reveal">
-        <h3>Envíanos un mensaje</h3>
-        <form id="contactForm" novalidate>
-          <div class="form-group">
-            <label class="form-label" for="cName">Nombre completo *</label>
-            <input class="form-control" type="text" id="cName" placeholder="Tu nombre completo" required />
-            <span class="field-error" id="cNameErr">Ingresa tu nombre completo</span>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="cEmail">Email *</label>
-            <input class="form-control" type="email" id="cEmail" placeholder="tucorreo@ejemplo.com" required />
-            <span class="field-error" id="cEmailErr">Ingresa un email válido</span>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="cSubject">Asunto *</label>
-            <input class="form-control" type="text" id="cSubject" placeholder="Asunto del mensaje" required />
-            <span class="field-error" id="cSubjectErr">Ingresa el asunto</span>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="cMessage">Mensaje *</label>
-            <textarea class="form-control" id="cMessage" rows="4" placeholder="Escribe tu mensaje..." required></textarea>
-            <span class="field-error" id="cMessageErr">Escribe tu mensaje</span>
-          </div>
-          <button type="submit" class="btn btn-primary" id="contactSubmit">
-            <i class="bi bi-send"></i> Enviar Mensaje
-          </button>
-        </form>
-      </div>
-      <div class="contact-info-card reveal reveal-delay-1">
-        <h3>Información de Contacto</h3>
-        <div class="info-item">
-          <div class="info-icon"><i class="bi bi-geo-alt"></i></div>
-          <div class="info-text"><small>Dirección</small><span>Calle Principal 123, Ciudad</span></div>
-        </div>
-        <div class="info-item">
-          <div class="info-icon"><i class="bi bi-telephone"></i></div>
-          <div class="info-text"><small>Teléfono</small><span>+57 311 555 00 57</span></div>
-        </div>
-        <div class="info-item">
-          <div class="info-icon"><i class="bi bi-envelope"></i></div>
-          <div class="info-text"><small>Email</small><span>info@eCommerce.com</span></div>
-        </div>
-        <div class="info-item">
-          <div class="info-icon"><i class="bi bi-clock"></i></div>
-          <div class="info-text"><small>Horario</small><span>Lun–Vie: 9:00 – 18:00</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── REGISTRO ──────────────────────────────────── -->
-<section class="section" id="registro">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <h2>Crear Cuenta</h2>
-      <p>Únete a eCommerce y disfruta de beneficios exclusivos</p>
-      <span class="section-line"></span>
-    </div>
-    <div class="register-card reveal">
-      <form id="registerForm" novalidate>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="rFirst">Nombre *</label>
-            <input class="form-control" type="text" id="rFirst" placeholder="Tu nombre" required />
-            <span class="field-error" id="rFirstErr">Ingresa tu nombre</span>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="rLast">Apellido *</label>
-            <input class="form-control" type="text" id="rLast" placeholder="Tu apellido" required />
-            <span class="field-error" id="rLastErr">Ingresa tu apellido</span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="rEmail">Email *</label>
-          <input class="form-control" type="email" id="rEmail" placeholder="tucorreo@ejemplo.com" required />
-          <span class="field-error" id="rEmailErr">Ingresa un email válido</span>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="rPass">Contraseña *</label>
-            <input class="form-control" type="password" id="rPass" placeholder="Mín. 8 caracteres" required minlength="8" />
-            <span class="field-error" id="rPassErr">Mínimo 8 caracteres</span>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="rPassC">Confirmar Contraseña *</label>
-            <input class="form-control" type="password" id="rPassC" placeholder="Repite tu contraseña" required />
-            <span class="field-error" id="rPassCErr">Las contraseñas no coinciden</span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="rAddr">Dirección *</label>
-          <input class="form-control" type="text" id="rAddr" placeholder="Tu dirección completa" required />
-          <span class="field-error" id="rAddrErr">Ingresa tu dirección</span>
-        </div>
-        <div class="form-row-3">
-          <div class="form-group">
-            <label class="form-label" for="rCity">Ciudad *</label>
-            <input class="form-control" type="text" id="rCity" placeholder="Tu ciudad" required />
-            <span class="field-error" id="rCityErr">Ingresa tu ciudad</span>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="rZip">C. Postal *</label>
-            <input class="form-control" type="text" id="rZip" placeholder="12345" required pattern="[0-9]{5}" />
-            <span class="field-error" id="rZipErr">5 dígitos requeridos</span>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="rCountry">País *</label>
-            <select class="form-control" id="rCountry" required>
-              <option value="" disabled selected>Seleccionar</option>
-              <option>España</option>
-              <option>México</option>
-              <option>Argentina</option>
-              <option>Colombia</option>
-              <option>Chile</option>
-            </select>
-            <span class="field-error" id="rCountryErr">Selecciona un país</span>
-          </div>
-        </div>
-        <div class="form-group form-check">
-          <input type="checkbox" id="rTerms" required />
-          <label for="rTerms">Acepto los <a href="#" style="color:var(--purple-mid);">términos y condiciones</a> *</label>
-        </div>
-        <span class="field-error" id="rTermsErr" style="display:none;">Debes aceptar los términos</span>
-        <button type="submit" class="btn btn-primary btn-full" id="registerSubmit" style="margin-top:8px;">
-          <i class="bi bi-person-check"></i> Crear Cuenta
+        <button
+          class="hamburger"
+          id="hamburger"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+        >
+          <span></span><span></span><span></span>
         </button>
-      </form>
-    </div>
-  </div>
-</section>
 
-<!-- ── FOOTER ────────────────────────────────────── -->
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <h3>eCommerce</h3>
-        <p>Tienda online comprometida con ofrecerte los mejores productos a precios competitivos, con un servicio al cliente excepcional y envíos rápidos.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Navegación</h4>
-        <ul>
-          <li><a href="#">Inicio</a></li>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#" class="active">Inicio</a></li>
           <li><a href="#productos">Productos</a></li>
           <li><a href="#contacto">Contacto</a></li>
           <li><a href="#registro">Registro</a></li>
-          <li><a href="#">Términos</a></li>
+          <li class="nav-dropdown">
+            <a
+              >Categorías
+              <i class="bi bi-chevron-down" style="font-size: 0.75rem"></i
+            ></a>
+            <div class="dropdown-panel">
+              <a href="#">Electrónicos</a>
+              <a href="#">Ropa</a>
+              <a href="#">Hogar</a>
+              <a href="#">Deportes</a>
+              <a href="#">Juguetes</a>
+            </div>
+          </li>
         </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Categorías</h4>
-        <ul>
-          <li><a href="#">Electrónicos</a></li>
-          <li><a href="#">Ropa</a></li>
-          <li><a href="#">Hogar</a></li>
-          <li><a href="#">Deportes</a></li>
-          <li><a href="#">Juguetes</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Síguenos</h4>
-        <div class="social-row">
-          <a href="#" class="social-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
-          <a href="#" class="social-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="social-link" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+
+        <div class="nav-actions" id="navActions">
+          <button class="icon-btn" id="darkToggle" aria-label="Cambiar modo">
+            <i class="bi bi-moon" id="darkIcon"></i>
+          </button>
+          <button class="icon-btn" id="cartBtn" aria-label="Carrito">
+            <i class="bi bi-bag"></i>
+            <span class="cart-badge" id="cartCount">3</span>
+          </button>
+          <button
+            class="icon-btn"
+            id="loginBtn"
+            aria-label="Iniciar sesión"
+            aria-haspopup="dialog"
+          >
+            <i class="bi bi-person"></i>
+          </button>
         </div>
-        <p style="font-size:.82rem;margin-bottom:10px;">Newsletter:</p>
-        <div class="newsletter-row">
-          <input type="email" placeholder="Tu email" aria-label="Email newsletter" />
-          <button class="btn btn-primary" aria-label="Suscribirse"><i class="bi bi-send"></i></button>
-        </div>
+      </div>
+    </nav>
+
+    <!-- ── LOGIN MODAL ──────────────────────────────── -->
+    <div
+      class="modal-overlay"
+      id="loginModal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Iniciar sesión"
+    >
+      <div class="modal-box">
+        <button class="modal-close" id="modalClose" aria-label="Cerrar">
+          <i class="bi bi-x-lg"></i>
+        </button>
+        <h2 class="modal-title">Iniciar Sesión</h2>
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email</label>
+            <input
+              class="form-control"
+              type="email"
+              id="loginEmail"
+              name="username"
+              placeholder="tucorreo@ejemplo.com"
+              required
+            />
+            <span class="field-error" id="loginEmailErr"
+              >Ingresa un email válido</span
+            >
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loginPass">Contraseña</label>
+            <input
+              class="form-control"
+              type="password"
+              id="loginPass"
+              name="password"
+              placeholder="Tu contraseña"
+              required
+            />
+            <span class="field-error" id="loginPassErr"
+              >Ingresa tu contraseña</span
+            >
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" id="rememberMe" />
+            <label for="rememberMe">Recuérdame</label>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary btn-full"
+            id="loginSubmit"
+          >
+            Iniciar Sesión
+          </button>
+          <p
+            style="
+              text-align: center;
+              margin-top: 16px;
+              font-size: 0.85rem;
+              color: var(--muted);
+            "
+          >
+            ¿No tienes cuenta?
+            <a
+              href="#registro"
+              style="color: var(--purple-mid); font-weight: 600"
+              id="goRegister"
+              >Regístrate</a
+            >
+          </p>
+        </form>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 eCommerce. Todos los derechos reservados.</p>
-    </div>
-  </div>
-</footer>
 
-<!-- ── SCRIPTS ───────────────────────────────────── -->
-<script>
-/* ── Preloader ───────────────────────── */
-window.addEventListener('load', () => {
-  setTimeout(() => document.getElementById('preloader').classList.add('hide'), 900);
-});
+    <!-- ── HERO ─────────────────────────────────────── -->
+    <section class="hero">
+      <div class="hero-content">
+        <span class="hero-eyebrow">Nueva temporada — 2025</span>
+        <h1>Tu tienda de<br /><em>confianza</em> online</h1>
+        <p>
+          Encuentra los mejores productos al mejor precio con envíos rápidos a
+          todo el país.
+        </p>
+        <div class="hero-search">
+          <input
+            type="text"
+            id="heroSearch"
+            placeholder="Buscar productos, marcas..."
+            aria-label="Buscar productos"
+          />
+          <button class="btn btn-primary" aria-label="Buscar">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </div>
+    </section>
 
-/* ── Dark mode ──────────────────────── */
-const body = document.body;
-const darkToggle = document.getElementById('darkToggle');
-const darkIcon = document.getElementById('darkIcon');
+    <!-- ── CAROUSEL ──────────────────────────────────── -->
+    <section class="section" style="padding-top: 48px; padding-bottom: 0">
+      <div class="section-inner">
+        <div class="carousel-wrap reveal">
+          <div class="carousel-track" id="carouselTrack">
+            <div class="carousel-slide">
+              <img
+                src="https://images.unsplash.com/photo-1607082350899-7e105aa886ae?auto=format&fit=crop&w=1200&h=400&q=80"
+                alt="Electrónicos"
+              />
+              <div class="carousel-caption">
+                <h3>Electrónicos con hasta 50% Off</h3>
+                <p>
+                  Productos seleccionados con descuentos especiales por tiempo
+                  limitado
+                </p>
+              </div>
+            </div>
+            <div class="carousel-slide">
+              <img
+                src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1200&h=400&q=80"
+                alt="Moda"
+              />
+              <div class="carousel-caption">
+                <h3>Moda de Temporada</h3>
+                <p>
+                  Nueva colección disponible con descuentos exclusivos para
+                  miembros
+                </p>
+              </div>
+            </div>
+            <div class="carousel-slide">
+              <img
+                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1200&h=400&q=80"
+                alt="Hogar"
+              />
+              <div class="carousel-caption">
+                <h3>Hogar y Decoración</h3>
+                <p>
+                  Transforma tu espacio con nuestras ofertas exclusivas en hogar
+                </p>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-btn prev" id="carPrev" aria-label="Anterior">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <button class="carousel-btn next" id="carNext" aria-label="Siguiente">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+          <div class="carousel-dots" id="carDots">
+            <span class="active" data-idx="0"></span>
+            <span data-idx="1"></span>
+            <span data-idx="2"></span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-function applyDark(on) {
-  body.classList.toggle('dark', on);
-  darkIcon.className = on ? 'bi bi-sun' : 'bi bi-moon';
-}
-applyDark(localStorage.getItem('dark') === '1');
-darkToggle.addEventListener('click', () => {
-  const on = !body.classList.contains('dark');
-  applyDark(on);
-  localStorage.setItem('dark', on ? '1' : '0');
-});
+    <!-- ── PRODUCTOS ─────────────────────────────────── -->
+    <section class="section" id="productos">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <h2>Productos Destacados</h2>
+          <p>
+            Los favoritos de nuestros clientes con la mejor relación
+            calidad-precio
+          </p>
+          <span class="section-line"></span>
+        </div>
+        <div class="products-grid">
+          <div class="product-card reveal reveal-delay-1">
+            <img
+              src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&h=300&q=80"
+              alt="Smartphone Pro X"
+            />
+            <div class="product-card-body">
+              <p class="product-category">Electrónicos</p>
+              <h3 class="product-name">Smartphone Pro X</h3>
+              <p class="product-desc">
+                El mejor smartphone del mercado con cámara de 108MP y batería de
+                larga duración.
+              </p>
+              <div class="product-footer">
+                <span class="product-price">$599.99</span>
+                <button class="btn btn-primary add-to-cart">
+                  <i class="bi bi-bag-plus"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card reveal reveal-delay-2">
+            <img
+              src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&h=300&q=80"
+              alt="Reloj Inteligente"
+            />
+            <div class="product-card-body">
+              <p class="product-category">Accesorios</p>
+              <h3 class="product-name">Reloj Inteligente</h3>
+              <p class="product-desc">
+                Monitoriza tu salud y actividad diaria con este elegante
+                smartwatch.
+              </p>
+              <div class="product-footer">
+                <span class="product-price">$199.99</span>
+                <button class="btn btn-primary add-to-cart">
+                  <i class="bi bi-bag-plus"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card reveal reveal-delay-3">
+            <img
+              src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&h=300&q=80"
+              alt="Auriculares Premium"
+            />
+            <div class="product-card-body">
+              <p class="product-category">Electrónicos</p>
+              <h3 class="product-name">Auriculares Premium</h3>
+              <p class="product-desc">
+                Sonido de alta fidelidad con cancelación activa de ruido y 30h
+                de batería.
+              </p>
+              <div class="product-footer">
+                <span class="product-price">$149.99</span>
+                <button class="btn btn-primary add-to-cart">
+                  <i class="bi bi-bag-plus"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card reveal reveal-delay-1">
+            <img
+              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&h=300&q=80"
+              alt="Zapatillas Deportivas"
+            />
+            <div class="product-card-body">
+              <p class="product-category">Deportes</p>
+              <h3 class="product-name">Zapatillas Deportivas</h3>
+              <p class="product-desc">
+                Máxima comodidad y rendimiento para tus entrenamientos diarios.
+              </p>
+              <div class="product-footer">
+                <span class="product-price">$89.99</span>
+                <button class="btn btn-primary add-to-cart">
+                  <i class="bi bi-bag-plus"></i> Añadir
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-/* ── Hamburger ──────────────────────── */
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('navLinks');
-const navActions = document.getElementById('navActions');
-hamburger.addEventListener('click', () => {
-  const open = hamburger.classList.toggle('open');
-  hamburger.setAttribute('aria-expanded', open);
-  navLinks.classList.toggle('open', open);
-  navActions.classList.toggle('open', open);
-});
+    <!-- ── CATÁLOGO / TABLA ──────────────────────────── -->
+    <section class="section" style="padding-top: 0">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <h2>Catálogo Completo</h2>
+          <p>Explora todos nuestros productos disponibles</p>
+          <span class="section-line"></span>
+        </div>
+        <div class="table-wrapper reveal">
+          <!-- Toolbar -->
+          <div class="dt-toolbar">
+            <div class="dt-filter-group">
+              <div class="dt-search-wrap">
+                <i
+                  class="bi bi-search"
+                  style="color: var(--muted); font-size: 0.9rem"
+                ></i>
+                <input
+                  type="text"
+                  id="dtSearch"
+                  placeholder="Buscar producto..."
+                  aria-label="Buscar"
+                />
+              </div>
+              <select class="dt-select" id="dtCat" aria-label="Categoría">
+                <option value="">Todas las categorías</option>
+                <option>Electrónicos</option>
+                <option>Ropa</option>
+                <option>Hogar</option>
+                <option>Accesorios</option>
+              </select>
+              <div class="dt-badge-filter">
+                <button class="dt-chip active" data-stock="">Todos</button>
+                <button class="dt-chip" data-stock="En stock">En stock</button>
+                <button class="dt-chip" data-stock="Agotado">Agotado</button>
+              </div>
+            </div>
+            <select class="dt-select" id="dtLen" style="min-width: 130px">
+              <option value="5">5 por página</option>
+              <option value="10" selected>10 por página</option>
+              <option value="25">25 por página</option>
+            </select>
+          </div>
 
-/* ── Back to top ────────────────────── */
-const backTop = document.getElementById('backTop');
-window.addEventListener('scroll', () => {
-  backTop.classList.toggle('show', window.scrollY > 320);
-});
-backTop.addEventListener('click', e => {
-  e.preventDefault();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+          <!-- Tabla -->
+          <div class="table-scroll">
+            <table id="catalogTable" style="width: 100%">
+              <thead>
+                <tr>
+                  <th data-col="0">ID <span class="sort-icon">↕</span></th>
+                  <th data-col="1">
+                    Producto <span class="sort-icon">↕</span>
+                  </th>
+                  <th data-col="2">
+                    Categoría <span class="sort-icon">↕</span>
+                  </th>
+                  <th data-col="3">Precio <span class="sort-icon">↕</span></th>
+                  <th data-col="4">Stock <span class="sort-icon">↕</span></th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="catalogBody"></tbody>
+            </table>
+          </div>
 
-/* ── Modal Login ────────────────────── */
-const loginModal = document.getElementById('loginModal');
-document.getElementById('loginBtn').addEventListener('click', () => loginModal.classList.add('open'));
-document.getElementById('modalClose').addEventListener('click', () => loginModal.classList.remove('open'));
-document.getElementById('goRegister').addEventListener('click', () => {
-  loginModal.classList.remove('open');
-  document.getElementById('registro').scrollIntoView({ behavior: 'smooth' });
-});
-loginModal.addEventListener('click', e => { if (e.target === loginModal) loginModal.classList.remove('open'); });
+          <!-- Footer -->
+          <div class="dt-footer">
+            <span
+              id="dtInfo"
+              style="font-size: 0.82rem; color: var(--muted)"
+            ></span>
+            <div id="dtPages" class="page-btns"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-/* ── Toast ──────────────────────────── */
-function showToast(msg, type = 'info') {
-  const icons = { success: 'bi-check-circle-fill', error: 'bi-x-circle-fill', info: 'bi-info-circle-fill' };
-  const colors = { success: '#22c55e', error: '#f43f5e', info: '#7c3aed' };
-  const t = document.createElement('div');
-  t.className = `ps-toast ${type}`;
-  t.innerHTML = `<i class="bi ${icons[type] || icons.info}" style="color:${colors[type]||colors.info};font-size:1.1rem;"></i><span class="toast-msg">${msg}</span>`;
-  document.getElementById('toastContainer').appendChild(t);
-  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(30px)'; t.style.transition='.3s'; setTimeout(() => t.remove(), 350); }, 3500);
-}
+    <!-- ── CONTACTO ──────────────────────────────────── -->
+    <section
+      class="section"
+      id="contacto"
+      style="background: rgba(124, 58, 237, 0.03)"
+    >
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <h2>Contáctanos</h2>
+          <p>Estamos aquí para ayudarte, escríbenos cuando quieras</p>
+          <span class="section-line"></span>
+        </div>
+        <div class="contact-grid">
+          <div class="form-card reveal">
+            <h3>Envíanos un mensaje</h3>
+            <form id="contactForm" novalidate>
+              <div class="form-group">
+                <label class="form-label" for="cName">Nombre completo *</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="cName"
+                  placeholder="Tu nombre completo"
+                  required
+                />
+                <span class="field-error" id="cNameErr"
+                  >Ingresa tu nombre completo</span
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cEmail">Email *</label>
+                <input
+                  class="form-control"
+                  type="email"
+                  id="cEmail"
+                  placeholder="tucorreo@ejemplo.com"
+                  required
+                />
+                <span class="field-error" id="cEmailErr"
+                  >Ingresa un email válido</span
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cSubject">Asunto *</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="cSubject"
+                  placeholder="Asunto del mensaje"
+                  required
+                />
+                <span class="field-error" id="cSubjectErr"
+                  >Ingresa el asunto</span
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cMessage">Mensaje *</label>
+                <textarea
+                  class="form-control"
+                  id="cMessage"
+                  rows="4"
+                  placeholder="Escribe tu mensaje..."
+                  required
+                ></textarea>
+                <span class="field-error" id="cMessageErr"
+                  >Escribe tu mensaje</span
+                >
+              </div>
+              <button type="submit" class="btn btn-primary" id="contactSubmit">
+                <i class="bi bi-send"></i> Enviar Mensaje
+              </button>
+            </form>
+          </div>
+          <div class="contact-info-card reveal reveal-delay-1">
+            <h3>Información de Contacto</h3>
+            <div class="info-item">
+              <div class="info-icon"><i class="bi bi-geo-alt"></i></div>
+              <div class="info-text">
+                <small>Dirección</small><span>Calle Principal 123, Ciudad</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon"><i class="bi bi-telephone"></i></div>
+              <div class="info-text">
+                <small>Teléfono</small><span>+57 311 555 00 57</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon"><i class="bi bi-envelope"></i></div>
+              <div class="info-text">
+                <small>Email</small><span>info@purpleshop.com</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-icon"><i class="bi bi-clock"></i></div>
+              <div class="info-text">
+                <small>Horario</small><span>Lun–Vie: 9:00 – 18:00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-/* ── Cart ───────────────────────────── */
-let cartCount = 3;
-const cartBadge = document.getElementById('cartCount');
-document.querySelectorAll('.add-to-cart').forEach(btn => {
-  btn.addEventListener('click', () => {
-    cartCount++;
-    cartBadge.textContent = cartCount;
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<i class="bi bi-check"></i> Añadido';
-    btn.disabled = true;
-    showToast('Producto añadido al carrito', 'success');
-    setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 2000);
-  });
-});
+    <!-- ── REGISTRO ──────────────────────────────────── -->
+    <section class="section" id="registro">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <h2>Crear Cuenta</h2>
+          <p>Únete a PurpleShop y disfruta de beneficios exclusivos</p>
+          <span class="section-line"></span>
+        </div>
+        <div class="register-card reveal">
+          <form id="registerForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="rFirst">Nombre *</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="rFirst"
+                  placeholder="Tu nombre"
+                  required
+                />
+                <span class="field-error" id="rFirstErr"
+                  >Ingresa tu nombre</span
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rLast">Apellido *</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="rLast"
+                  placeholder="Tu apellido"
+                  required
+                />
+                <span class="field-error" id="rLastErr"
+                  >Ingresa tu apellido</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rEmail">Email *</label>
+              <input
+                class="form-control"
+                type="email"
+                id="rEmail"
+                placeholder="tucorreo@ejemplo.com"
+                required
+              />
+              <span class="field-error" id="rEmailErr"
+                >Ingresa un email válido</span
+              >
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="rPass">Contraseña *</label>
+                <input
+                  class="form-control"
+                  type="password"
+                  id="rPass"
+                  placeholder="Mín. 8 caracteres"
+                  required
+                  minlength="8"
+                />
+                <span class="field-error" id="rPassErr"
+                  >Mínimo 8 caracteres</span
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rPassC"
+                  >Confirmar Contraseña *</label
+                >
+                <input
+                  class="form-control"
+                  type="password"
+                  id="rPassC"
+                  placeholder="Repite tu contraseña"
+                  required
+                />
+                <span class="field-error" id="rPassCErr"
+                  >Las contraseñas no coinciden</span
+                >
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rAddr">Dirección *</label>
+              <input
+                class="form-control"
+                type="text"
+                id="rAddr"
+                placeholder="Tu dirección completa"
+                required
+              />
+              <span class="field-error" id="rAddrErr"
+                >Ingresa tu dirección</span
+              >
+            </div>
+            <div class="form-row-3">
+              <div class="form-group">
+                <label class="form-label" for="rCity">Ciudad *</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="rCity"
+                  placeholder="Tu ciudad"
+                  required
+                />
+                <span class="field-error" id="rCityErr">Ingresa tu ciudad</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rZip">C. Postal *</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="rZip"
+                  placeholder="12345"
+                  required
+                  pattern="[0-9]{5}"
+                />
+                <span class="field-error" id="rZipErr"
+                  >5 dígitos requeridos</span
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rCountry">País *</label>
+                <select class="form-control" id="rCountry" required>
+                  <option value="" disabled selected>Seleccionar</option>
+                  <option>España</option>
+                  <option>México</option>
+                  <option>Argentina</option>
+                  <option>Colombia</option>
+                  <option>Chile</option>
+                </select>
+                <span class="field-error" id="rCountryErr"
+                  >Selecciona un país</span
+                >
+              </div>
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" id="rTerms" required />
+              <label for="rTerms"
+                >Acepto los
+                <a href="#" style="color: var(--purple-mid)"
+                  >términos y condiciones</a
+                >
+                *</label
+              >
+            </div>
+            <span class="field-error" id="rTermsErr" style="display: none"
+              >Debes aceptar los términos</span
+            >
+            <button
+              type="submit"
+              class="btn btn-primary btn-full"
+              id="registerSubmit"
+              style="margin-top: 8px"
+            >
+              <i class="bi bi-person-check"></i> Crear Cuenta
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
 
-/* ── Carousel ───────────────────────── */
-let carIdx = 0;
-const track = document.getElementById('carouselTrack');
-const dots = document.querySelectorAll('#carDots span');
+    <!-- ── FOOTER ────────────────────────────────────── -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h3>PurpleShop</h3>
+            <p>
+              Tienda online comprometida con ofrecerte los mejores productos a
+              precios competitivos, con un servicio al cliente excepcional y
+              envíos rápidos.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h4>Navegación</h4>
+            <ul>
+              <li><a href="#">Inicio</a></li>
+              <li><a href="#productos">Productos</a></li>
+              <li><a href="#contacto">Contacto</a></li>
+              <li><a href="#registro">Registro</a></li>
+              <li><a href="#">Términos</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Categorías</h4>
+            <ul>
+              <li><a href="#">Electrónicos</a></li>
+              <li><a href="#">Ropa</a></li>
+              <li><a href="#">Hogar</a></li>
+              <li><a href="#">Deportes</a></li>
+              <li><a href="#">Juguetes</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Síguenos</h4>
+            <div class="social-row">
+              <a href="#" class="social-link" aria-label="Facebook"
+                ><i class="bi bi-facebook"></i
+              ></a>
+              <a href="#" class="social-link" aria-label="Twitter"
+                ><i class="bi bi-twitter-x"></i
+              ></a>
+              <a href="#" class="social-link" aria-label="Instagram"
+                ><i class="bi bi-instagram"></i
+              ></a>
+              <a href="#" class="social-link" aria-label="YouTube"
+                ><i class="bi bi-youtube"></i
+              ></a>
+            </div>
+            <p style="font-size: 0.82rem; margin-bottom: 10px">Newsletter:</p>
+            <div class="newsletter-row">
+              <input
+                type="email"
+                placeholder="Tu email"
+                aria-label="Email newsletter"
+              />
+              <button class="btn btn-primary" aria-label="Suscribirse">
+                <i class="bi bi-send"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 PurpleShop. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
 
-function goTo(i) {
-  carIdx = (i + 3) % 3;
-  track.style.transform = `translateX(-${carIdx * 100}%)`;
-  dots.forEach((d, j) => d.classList.toggle('active', j === carIdx));
-}
-document.getElementById('carPrev').addEventListener('click', () => goTo(carIdx - 1));
-document.getElementById('carNext').addEventListener('click', () => goTo(carIdx + 1));
-dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.idx)));
-let carTimer = setInterval(() => goTo(carIdx + 1), 5000);
-track.parentElement.addEventListener('mouseenter', () => clearInterval(carTimer));
-track.parentElement.addEventListener('mouseleave', () => { carTimer = setInterval(() => goTo(carIdx + 1), 5000); });
-
-/* ── DataTables (inicializado desde jQuery) ── */
-// placeholder — logic moved to jQuery block below
-
-/* ── Scroll reveal ──────────────────── */
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); observer.unobserve(e.target); } });
-}, { threshold: 0.12 });
-reveals.forEach(el => observer.observe(el));
-
-/* ── Validation helpers ──────────────── */
-const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-function val(id, cond, errId) {
-  const el = document.getElementById(id);
-  const err = document.getElementById(errId);
-  const ok = cond(el);
-  el.classList.toggle('error', !ok);
-  err.classList.toggle('show', !ok);
-  return ok;
-}
-function setLoading(btn, loading) {
-  btn.disabled = loading;
-  btn.innerHTML = loading
-    ? '<span class="spinner"></span> Enviando...'
-    : btn.dataset.orig;
-}
-
-/* ── Contact form ───────────────────── */
-const contactForm = document.getElementById('contactForm');
-const contactBtn  = document.getElementById('contactSubmit');
-contactBtn.dataset.orig = contactBtn.innerHTML;
-contactForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const ok = [
-    val('cName', el => el.value.trim().length > 1, 'cNameErr'),
-    val('cEmail', el => emailRe.test(el.value), 'cEmailErr'),
-    val('cSubject', el => el.value.trim().length > 1, 'cSubjectErr'),
-    val('cMessage', el => el.value.trim().length > 5, 'cMessageErr'),
-  ].every(Boolean);
-  if (!ok) return showToast('Corrige los errores del formulario', 'error');
-  setLoading(contactBtn, true);
-  setTimeout(() => {
-    setLoading(contactBtn, false);
-    contactForm.reset();
-    showToast('Mensaje enviado correctamente', 'success');
-  }, 2000);
-});
-
-/* ── Register form ──────────────────── */
-const registerForm = document.getElementById('registerForm');
-const registerBtn  = document.getElementById('registerSubmit');
-registerBtn.dataset.orig = registerBtn.innerHTML;
-registerForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const passEl = document.getElementById('rPass');
-  const passCEl = document.getElementById('rPassC');
-  const ok = [
-    val('rFirst', el => el.value.trim().length > 0, 'rFirstErr'),
-    val('rLast', el => el.value.trim().length > 0, 'rLastErr'),
-    val('rEmail', el => emailRe.test(el.value), 'rEmailErr'),
-    val('rPass', el => el.value.length >= 8, 'rPassErr'),
-    val('rPassC', el => el.value === passEl.value, 'rPassCErr'),
-    val('rAddr', el => el.value.trim().length > 0, 'rAddrErr'),
-    val('rCity', el => el.value.trim().length > 0, 'rCityErr'),
-    val('rZip', el => /^[0-9]{5}$/.test(el.value), 'rZipErr'),
-    val('rCountry', el => el.value !== '', 'rCountryErr'),
-    val('rTerms', el => el.checked, 'rTermsErr'),
-  ].every(Boolean);
-  if (!ok) return showToast('Corrige los errores del formulario', 'error');
-  setLoading(registerBtn, true);
-  setTimeout(() => {
-    setLoading(registerBtn, false);
-    registerForm.reset();
-    showToast('¡Cuenta creada exitosamente! Bienvenido a eCommerce', 'success');
-  }, 2200);
-});
-
-/* ── Login form ─────────────────────── */
-document.getElementById('loginForm').addEventListener('submit', e => {
-  e.preventDefault();
-  const btn = document.getElementById('loginSubmit');
-  const ok = [
-    val('loginEmail', el => emailRe.test(el.value), 'loginEmailErr'),
-    val('loginPass', el => el.value.trim().length > 0, 'loginPassErr'),
-  ].every(Boolean);
-  if (!ok) return showToast('Corrige los errores', 'error');
-  const orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Ingresando...';
-  setTimeout(() => {
-    btn.disabled = false; btn.innerHTML = orig;
-    loginModal.classList.remove('open');
-    showToast('Inicio de sesión exitoso', 'success');
-  }, 1800);
-});
-</script>
-
-<!-- jQuery + DataTables + Responsive extension -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-<script>
-$(function () {
-
-  /* ── Render badge in stock column ─────────────── */
-  function stockBadge(val) {
-    return val === 'En stock'
-      ? '<span class="badge badge-green">En stock</span>'
-      : '<span class="badge badge-red">Agotado</span>';
-  }
-
-  /* ── Init DataTable ────────────────────────────── */
-  var dt = $('#catalogTable').DataTable({
-    responsive: true,
-    pageLength: 10,
-    language: {
-      url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
-    },
-    columnDefs: [
-      { orderable: false, targets: 5 },          // Acciones: sin ordenar
-      {                                            // Stock: renderizar badge
-        targets: 4,
-        render: function (data) { return stockBadge(data); }
-      }
-    ],
-    drawCallback: function () {
-      /* Re-apply dark-mode badge colors after each draw */
-      if (document.body.classList.contains('dark')) {
-        document.querySelectorAll('.badge-green').forEach(function (el) {
-          el.style.background = 'rgba(34,197,94,.15)';
-          el.style.color = '#4ade80';
-        });
-        document.querySelectorAll('.badge-red').forEach(function (el) {
-          el.style.background = 'rgba(244,63,94,.15)';
-          el.style.color = '#fb7185';
-        });
-      }
-    }
-  });
-
-  /* ── Custom global search ──────────────────────── */
-  $('#dtGlobalSearch').on('input', function () {
-    dt.search(this.value).draw();
-  });
-
-  /* ── Category column filter (col 2) ───────────── */
-  $('#dtCatFilter').on('change', function () {
-    dt.column(2).search(this.value).draw();
-  });
-
-  /* ── Stock chip filter (col 4) ────────────────── */
-  $('.dt-chip').on('click', function () {
-    $('.dt-chip').removeClass('active');
-    $(this).addClass('active');
-    var stock = $(this).data('stock');
-    dt.column(4).search(stock).draw();
-  });
-
-  /* ── Page length selector ──────────────────────── */
-  $('#dtPageLen').on('change', function () {
-    dt.page.len(+this.value).draw();
-  });
-
-  /* ── Sync dark-mode badge colors on toggle ─────── */
-  document.getElementById('darkToggle').addEventListener('click', function () {
-    setTimeout(function () {
-      var isDark = document.body.classList.contains('dark');
-      document.querySelectorAll('.badge-green').forEach(function (el) {
-        el.style.background = isDark ? 'rgba(34,197,94,.15)' : '#dcfce7';
-        el.style.color      = isDark ? '#4ade80'             : '#166534';
-      });
-      document.querySelectorAll('.badge-red').forEach(function (el) {
-        el.style.background = isDark ? 'rgba(244,63,94,.15)' : '#fee2e2';
-        el.style.color      = isDark ? '#fb7185'             : '#991b1b';
-      });
-    }, 50);
-  });
-
-});
-</script>
-</body>
+    <!-- ── SCRIPTS ───────────────────────────────────── -->
+    <script src="assets/js/scripts.js"></script>
+  </body>
 </html>
